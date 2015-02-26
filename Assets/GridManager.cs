@@ -18,7 +18,7 @@ public class GridManager : MonoBehaviour {
 				orbClone.transform.SetParent(canvas, true);
 				orbClone.transform.localScale = new Vector3(1.0f, 1.0f, 1);
 				orbClone.transform.localPosition = new Vector3((i-2)*110, (j-5.0f)*110, 0);
-				
+
 				OrbScript os = orbClone.GetComponent<OrbScript>();
 				os.orbType = Random.Range(0, 3);
 				os.UpdateColor();
@@ -35,7 +35,9 @@ public class GridManager : MonoBehaviour {
 		int blueCount = 0;
 
 		for(int i=0; i<5; i++){
-			
+			for(int j=0; j<5; j++){
+
+			}
 		}
 
 	}
