@@ -7,7 +7,8 @@ public class OrbScript : MonoBehaviour {
 	public int orbType;
 	public int row;
 	public int col;
-	
+	public bool marked;
+
 	// Update is called once per frame
 	public void UpdateColor () {
 		if(orbType == 0){
