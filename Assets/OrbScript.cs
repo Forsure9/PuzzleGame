@@ -8,6 +8,11 @@ public class OrbScript : MonoBehaviour {
 	public int row;
 	public int col;
 	public bool marked;
+	public bool working;
+
+	public void Start(){
+		working = true;
+	}
 
 	// Update is called once per frame
 	public void UpdateColor () {
@@ -25,8 +30,8 @@ public class OrbScript : MonoBehaviour {
 	public void ChangeColor(){
 		GameObject canvas = GameObject.Find("Canvas");
 		GridManager gm = canvas.GetComponent<GridManager>();
+		if (gm.turnCount < gm.maxTurns){
 
-		if(gm.turnCount < gm.maxTurns){
 			gm.turnCount += 1;
 
 			gm.orbArray[row, col].GetComponent<OrbScript>().orbType += 1;
@@ -54,9 +59,12 @@ public class OrbScript : MonoBehaviour {
 				gm.orbArray[row, col+1].GetComponent<OrbScript>().UpdateColor();
 			}
 		}
-
 		if(gm.turnCount == gm.maxTurns){
+			gm.turnCount += 1;
+			working = false;
+			gm.clearingLines = true;
 			gm.CheckForLines();
+
 		}
 	}
 }

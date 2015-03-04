@@ -13,8 +13,15 @@ public class GridManager : MonoBehaviour {
 	public int totalGreenCount = 0;
 	public int totalBlueCount = 0;
 
+	public bool clearingLines;
+
+
+
+
+
 	// Use this for initialization
 	void Start () {
+		clearingLines = false;
 		Transform canvas = GameObject.Find("Canvas").transform;
 		for(float i=0.0f; i<(float)GridSize; i+=1.0f){
 			for(float j=0.0f; j<(float)GridSize; j+=1.0f){
@@ -48,10 +55,10 @@ public class GridManager : MonoBehaviour {
 
 				if(current.orbType == next1.orbType && current.orbType == next2.orbType &&
 					current.orbType == next3.orbType){
-					current.GetComponent<Image>().color = Color.yellow;
-					next1.GetComponent<Image>().color = Color.yellow;
-					next2.GetComponent<Image>().color = Color.yellow;
-					next3.GetComponent<Image>().color = Color.yellow;
+					//current.GetComponent<Image>().color = Color.yellow;
+					//next1.GetComponent<Image>().color = Color.yellow;
+					//next2.GetComponent<Image>().color = Color.yellow;
+					//next3.GetComponent<Image>().color = Color.yellow;
 					current.marked = true;
 					next1.marked = true;
 					next2.marked = true;
@@ -69,10 +76,10 @@ public class GridManager : MonoBehaviour {
 
 				if(current.orbType == next1.orbType && current.orbType == next2.orbType &&
 					current.orbType == next3.orbType){
-					current.GetComponent<Image>().color = Color.yellow;
-					next1.GetComponent<Image>().color = Color.yellow;
-					next2.GetComponent<Image>().color = Color.yellow;
-					next3.GetComponent<Image>().color = Color.yellow;
+					//current.GetComponent<Image>().color = Color.yellow;
+					//next1.GetComponent<Image>().color = Color.yellow;
+					//next2.GetComponent<Image>().color = Color.yellow;
+					//next3.GetComponent<Image>().color = Color.yellow;
 					current.marked = true;
 					next1.marked = true;
 					next2.marked = true;
@@ -100,6 +107,24 @@ public class GridManager : MonoBehaviour {
 		totalGreenCount += greenCount;
 		totalBlueCount += blueCount;
 
+		GameObject.Find("RedScore").GetComponent<Text>().text = "Red: "+ totalRedCount;
+		GameObject.Find("GreenScore").GetComponent<Text>().text = "Green: "+ totalGreenCount;
+		GameObject.Find("BlueScore").GetComponent<Text>().text = "Blue: "+ totalBlueCount;
+	}
+
+
+	void Update(){
+		if (clearingLines){
+			for (int i=0; i<5; i++){
+				for(int j=0; j<5; j++){
+					OrbScript orb = orbArray[i, j].GetComponent<OrbScript>();
+					Color original = orb.GetComponent<Image>().color;
+					if(orb.marked){
+						orb.GetComponent<Image>().color = Color.Lerp(original, Color.white, Time.time);
+					}
+				}
+			}
+		}
 	}
 
 }
