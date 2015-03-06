@@ -8,23 +8,25 @@ public class OrbScript : MonoBehaviour {
 	public int row;
 	public int col;
 	public bool marked;
-	public bool working;
 
-	public void Start(){
-		working = true;
-	}
 
-	// Update is called once per frame
-	public void UpdateColor () {
+	public Color GetOrbColor(){
 		if(orbType == 0){
-			GetComponent<Image>().color = Color.red;
+			return Color.red;
 		}
 		else if(orbType == 1){
-			GetComponent<Image>().color = Color.green;
+			return Color.green;
 		}
 		else if(orbType == 2){
-			GetComponent<Image>().color = Color.blue;
+			return Color.blue;
 		}
+		else{
+			return Color.white;
+		}
+	}
+
+	public void UpdateColor () {
+		GetComponent<Image>().color = GetOrbColor();
 	}
 
 	public void ChangeColor(){
@@ -61,8 +63,13 @@ public class OrbScript : MonoBehaviour {
 		}
 		if(gm.turnCount == gm.maxTurns){
 			gm.turnCount += 1;
-			working = false;
 			gm.clearingLines = true;
+			gm.replacingOrbs = false;
+			
+			gm.markedOrbIndex = 0;
+			gm.markedOrbs = new int[25][];
+
+			gm.t = 0.0f;
 			gm.CheckForLines();
 
 		}
