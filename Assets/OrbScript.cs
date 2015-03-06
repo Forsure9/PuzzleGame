@@ -65,7 +65,7 @@ public class OrbScript : MonoBehaviour {
 			gm.turnCount += 1;
 			gm.clearingLines = true;
 			gm.replacingOrbs = false;
-			
+
 			gm.markedOrbIndex = 0;
 			gm.markedOrbs = new int[25][];
 

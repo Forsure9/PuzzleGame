@@ -152,7 +152,12 @@ public class GridManager : MonoBehaviour {
 		}
 		if (clearingLines && orbsToClear <= 0){
 			clearingLines = false;
-			replacingOrbs = true;
+			if (orbsToClear == 0){
+				replacingOrbs = false;
+			}
+			else{
+				replacingOrbs = true;
+			}
 			orbsToClear = 0;
 			t = 0;
 		}
