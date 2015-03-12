@@ -27,7 +27,7 @@ public class GridManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		orbArray = new GameObject[5, 5];
-		
+
 		redCount = 0;
 		greenCount = 0;
 		blueCount = 0;
@@ -144,7 +144,7 @@ public class GridManager : MonoBehaviour {
 				}
 			}
 		}
-		
+
 
 		GameObject.Find("RedScore").GetComponent<Text>().text = "Fire: "+ redCount;
 		GameObject.Find("GreenScore").GetComponent<Text>().text = "Grass: "+ greenCount;
@@ -154,6 +154,8 @@ public class GridManager : MonoBehaviour {
 		if (orbsToClear > 0){
 			clearingLines = true;
 		}
+		BattleSystem bs = GetComponent<BattleSystem>();
+		bs.isRunning = true;
 	}
 
 
@@ -163,14 +165,13 @@ public class GridManager : MonoBehaviour {
 			orbsToClear = 0;
 			t = 0;
 
-			BattleSystem bs = GetComponent<BattleSystem>();
-			bs.isRunning = true;
+
 		}
 
 		if(replacingOrbs && orbsToReplace <= 0){
 			replacingOrbs = false;
 			orbsToReplace = 0;
-			turnCount = 0;
+			
 		}
 
 		if (clearingLines){

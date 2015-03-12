@@ -10,7 +10,7 @@ public class BattleSystem : MonoBehaviour {
 		isRunning = false;
 		t = 0.0f;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if(isRunning){
@@ -22,14 +22,15 @@ public class BattleSystem : MonoBehaviour {
 				GameObject.Find("BattleText").GetComponent<Text>().text = "";
 				GridManager gm = GetComponent<GridManager>();
 
+				gm.turnCount = 0;
+
 				if (gm.orbsToReplace > 0){
 					gm.replacingOrbs = true;
 				}
 				else{
 					gm.replacingOrbs = false;
-					gm.turnCount = 0;
 				}
 			}
-		}	
+		}
 	}
 }
