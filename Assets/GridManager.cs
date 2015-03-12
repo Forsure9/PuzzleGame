@@ -9,9 +9,9 @@ public class GridManager : MonoBehaviour {
 	public int maxTurns;
 	public int turnCount;
 
-	public int totalRedCount;
-	public int totalGreenCount;
-	public int totalBlueCount;
+	public int redCount;
+	public int greenCount;
+	public int blueCount;
 
 	public bool clearingLines;
 	public bool replacingOrbs;
@@ -30,9 +30,9 @@ public class GridManager : MonoBehaviour {
 		clearingLines = false;
 		replacingOrbs = false;
 		t = 0;
-		totalRedCount = 0;
-		totalGreenCount = 0;
-		totalBlueCount = 0;
+		redCount = 0;
+		greenCount = 0;
+		blueCount = 0;
 
 		Transform canvas = GameObject.Find("Canvas").transform;
 		for(float i=0.0f; i<(float)GridSize; i+=1.0f){
@@ -53,9 +53,9 @@ public class GridManager : MonoBehaviour {
 	}
 
 	public void CheckForLines(){
-		int redCount = 0;
-		int greenCount = 0;
-		int blueCount = 0;
+		redCount = 0;
+		greenCount = 0;
+		blueCount = 0;
 
 		for(int i=0; i<2; i++){
 			for(int j=0; j<5; j++){
@@ -104,6 +104,7 @@ public class GridManager : MonoBehaviour {
 			for(int j=0; j<5; j++){
 				OrbScript orb = orbArray[i, j].GetComponent<OrbScript>();
 				if(orb.marked){
+					orb.marked = false;
 					if(orb.orbType == 0){
 						redCount += 1;
 					}
@@ -116,15 +117,11 @@ public class GridManager : MonoBehaviour {
 				}
 			}
 		}
-		totalRedCount += redCount;
-		totalGreenCount += greenCount;
-		totalBlueCount += blueCount;
-
 		orbsToClear = redCount + greenCount + blueCount;
 
-		GameObject.Find("RedScore").GetComponent<Text>().text = "Red: "+ totalRedCount;
-		GameObject.Find("GreenScore").GetComponent<Text>().text = "Green: "+ totalGreenCount;
-		GameObject.Find("BlueScore").GetComponent<Text>().text = "Blue: "+ totalBlueCount;
+		GameObject.Find("RedScore").GetComponent<Text>().text = "Red: "+ redCount;
+		GameObject.Find("GreenScore").GetComponent<Text>().text = "Green: "+ greenCount;
+		GameObject.Find("BlueScore").GetComponent<Text>().text = "Blue: "+ blueCount;
 	}
 
 
