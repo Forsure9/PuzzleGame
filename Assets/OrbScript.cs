@@ -63,13 +63,6 @@ public class OrbScript : MonoBehaviour {
 		}
 		if(gm.turnCount == gm.maxTurns){
 			gm.turnCount += 1;
-			gm.clearingLines = true;
-			gm.replacingOrbs = false;
-
-			gm.markedOrbIndex = 0;
-			gm.markedOrbs = new int[25][];
-
-			gm.t = 0.0f;
 			gm.CheckForLines();
 
 		}

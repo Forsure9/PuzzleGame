@@ -27,9 +27,7 @@ public class GridManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		orbArray = new GameObject[5, 5];
-		clearingLines = false;
-		replacingOrbs = false;
-		t = 0;
+		
 		redCount = 0;
 		greenCount = 0;
 		blueCount = 0;
@@ -57,6 +55,12 @@ public class GridManager : MonoBehaviour {
 		greenCount = 0;
 		blueCount = 0;
 
+		clearingLines = false;
+		replacingOrbs = false;
+		t = 0.0f;
+		markedOrbIndex = 0;
+		markedOrbs = new int[25][];
+
 		for(int i=0; i<2; i++){
 			for(int j=0; j<5; j++){
 				OrbScript current = orbArray[i, j].GetComponent<OrbScript>();
@@ -66,15 +70,26 @@ public class GridManager : MonoBehaviour {
 
 				if(current.orbType == next1.orbType && current.orbType == next2.orbType &&
 					current.orbType == next3.orbType){
-					current.marked = true;
-					next1.marked = true;
-					next2.marked = true;
-					next3.marked = true;
-					markedOrbs[markedOrbIndex] = new int[2]{i, j};
-					markedOrbs[markedOrbIndex+1] = new int[2]{i+1, j};
-					markedOrbs[markedOrbIndex+2] = new int[2]{i+2, j};
-					markedOrbs[markedOrbIndex+3] = new int[2]{i+3, j};
-					markedOrbIndex += 4;
+					if (!current.marked){
+						current.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i, j};
+						markedOrbIndex += 1;
+					}
+					if (!next1.marked){
+						next1.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i+1, j};
+						markedOrbIndex += 1;
+					}
+					if (!next2.marked){
+						next2.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i+2, j};
+						markedOrbIndex += 1;
+					}
+					if (!next3.marked){
+						next3.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i+3, j};
+						markedOrbIndex += 1;
+					}
 				}
 			}
 		}
@@ -88,18 +103,30 @@ public class GridManager : MonoBehaviour {
 
 				if(current.orbType == next1.orbType && current.orbType == next2.orbType &&
 					current.orbType == next3.orbType){
-					current.marked = true;
-					next1.marked = true;
-					next2.marked = true;
-					next3.marked = true;
-					markedOrbs[markedOrbIndex] = new int[2]{i, j};
-					markedOrbs[markedOrbIndex+1] = new int[2]{i, j+1};
-					markedOrbs[markedOrbIndex+2] = new int[2]{i, j+2};
-					markedOrbs[markedOrbIndex+3] = new int[2]{i, j+3};
-					markedOrbIndex += 4;
+					if (!current.marked){
+						current.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i, j};
+						markedOrbIndex += 1;
+					}
+					if (!next1.marked){
+						next1.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i, j+1};
+						markedOrbIndex += 1;
+					}
+					if (!next2.marked){
+						next2.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i, j+2};
+						markedOrbIndex += 1;
+					}
+					if (!next3.marked){
+						next3.marked = true;
+						markedOrbs[markedOrbIndex] = new int[2]{i, j+3};
+						markedOrbIndex += 1;
+					}
 				}
 			}
 		}
+
 		for(int i=0; i<5; i++){
 			for(int j=0; j<5; j++){
 				OrbScript orb = orbArray[i, j].GetComponent<OrbScript>();
@@ -117,16 +144,36 @@ public class GridManager : MonoBehaviour {
 				}
 			}
 		}
-		orbsToClear = redCount + greenCount + blueCount;
+		
 
-		GameObject.Find("RedScore").GetComponent<Text>().text = "Red: "+ redCount;
-		GameObject.Find("GreenScore").GetComponent<Text>().text = "Green: "+ greenCount;
-		GameObject.Find("BlueScore").GetComponent<Text>().text = "Blue: "+ blueCount;
+		GameObject.Find("RedScore").GetComponent<Text>().text = "Fire: "+ redCount;
+		GameObject.Find("GreenScore").GetComponent<Text>().text = "Grass: "+ greenCount;
+		GameObject.Find("BlueScore").GetComponent<Text>().text = "Water: "+ blueCount;
+
+		orbsToClear = redCount + greenCount + blueCount;
+		if (orbsToClear > 0){
+			clearingLines = true;
+		}
 	}
 
 
 	void Update(){
-		if (clearingLines && orbsToClear > 0){
+		if (clearingLines && orbsToClear <= 0){
+			clearingLines = false;
+			orbsToClear = 0;
+			t = 0;
+
+			BattleSystem bs = GetComponent<BattleSystem>();
+			bs.isRunning = true;
+		}
+
+		if(replacingOrbs && orbsToReplace <= 0){
+			replacingOrbs = false;
+			orbsToReplace = 0;
+			turnCount = 0;
+		}
+
+		if (clearingLines){
 			for (int i=0; markedOrbs[i] != null; i++){
 				if (markedOrbs[i] == null){
 					continue;
@@ -147,29 +194,8 @@ public class GridManager : MonoBehaviour {
 				}
 			}
 		}
-		if (clearingLines && orbsToClear <= 0){
-			clearingLines = false;
-			if (orbsToClear == 0){
-				replacingOrbs = false;
-			}
-			else{
-				replacingOrbs = true;
-			}
-			orbsToClear = 0;
-			t = 0;
-		}
-		if(replacingOrbs && orbsToReplace <= 0){
-			replacingOrbs = false;
-			orbsToReplace = 0;
 
-			// call to battle system here
-			// set turnCount=0 there and remove it from here
-			// also make a bool that says whether the battle system is running
-			// so that you can make an if statement here to make sure its called
-			// only once, not every update
-			turnCount = 0;
-		}
-		if (replacingOrbs && orbsToReplace > 0){
+		if (replacingOrbs){
 			for (int i=0; markedOrbs[i] != null; i++){
 				if (markedOrbs[i] == null){
 					continue;
