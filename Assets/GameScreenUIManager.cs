@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameScreenUIManager : MonoBehaviour {
+
 	void Start () {
-		//Transform canvas = GameObject.Find("Canvas").transform;
-		//canvas.
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		GameObject.Find("DungeonName").GetComponent<Text>().text = "Dungeon "+ globalData.dungeonSelected;
+
+		Text cardText = GameObject.Find("cardText").GetComponent<Text>();
+		cardText.text = "cards: ";
+
+		for(int i=0; i<globalData.playerBattleInv.Count; i++){
+			cardText.text += globalData.playerBattleInv[i] + ", ";
+		}
 	}
 }
